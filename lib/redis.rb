@@ -2445,7 +2445,7 @@ class Redis
         yield(self)
         original.call_pipeline(@client)
       ensure
-        @client = original
+        @client = _client
       end
     end
   end
@@ -2491,7 +2491,7 @@ class Redis
           yield(self)
           original.call_pipeline(pipeline)
         ensure
-          @client = original
+          @client = client
         end
       end
     end
