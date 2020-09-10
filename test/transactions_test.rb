@@ -198,12 +198,9 @@ class TestTransactions < Minitest::Test
 
   def test_multi_with_interrupt_preserves_client
     original = r._client
-    begin
-      Redis::Pipeline::Multi.stubs(:new).raises(Interrupt)
-      r.multi {}
-    rescue Interrupt
-      assert_equal r._client, original
-    end
+    Redis::Pipeline.stubs(:new).raises(Interrupt)
+    assert_raises(Interrupt) { r.multi {} }
+    assert_equal r._client, original
   end
 
   def test_raise_command_error_when_exec_fails

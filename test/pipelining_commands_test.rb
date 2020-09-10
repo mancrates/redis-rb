@@ -255,11 +255,8 @@ class TestPipeliningCommands < Minitest::Test
 
   def test_pipeline_interrupt_preserves_client
     original = r._client
-    begin
-      Redis::Pipeline.stubs(:new).raises(Interrupt)
-      r.pipelined {}
-    rescue Interrupt
-      assert_equal r._client, original
-    end
+    Redis::Pipeline.stubs(:new).raises(Interrupt)
+    assert_raises(Interrupt) { r.pipelined {} }
+    assert_equal r._client, original
   end
 end
